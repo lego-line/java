@@ -1,9 +1,10 @@
-package ui;
+package legoline.ui;
 
 import java.awt.event.*;
 
 import javax.swing.*;
-import hardware.Feeder;
+
+import legoline.hardware.Feeder;
 
 public class FeederPanel extends JPanel {
 	private static final long serialVersionUID = -7651630967299290601L;

@@ -1,4 +1,4 @@
-package ui;
+package legoline.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import hardware.Belt;
+import legoline.hardware.Belt;
 
 public class BeltPanel extends JPanel {
 	private static final long serialVersionUID = -4081099368456253292L;

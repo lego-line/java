@@ -1,4 +1,4 @@
-package hardware;
+package legoline.hardware;
 
 import lejos.robotics.Encoder;
 

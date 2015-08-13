@@ -1,4 +1,4 @@
-package hardware;
+package legoline.hardware;
 import lejos.robotics.RegulatedMotor;
 
 public class Belt implements AutoCloseable {

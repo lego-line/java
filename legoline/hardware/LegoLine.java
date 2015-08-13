@@ -1,4 +1,4 @@
-package hardware;
+package legoline.hardware;
 
 import java.io.IOException;
 import java.util.ArrayList;

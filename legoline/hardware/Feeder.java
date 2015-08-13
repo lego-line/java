@@ -1,4 +1,4 @@
-package hardware;
+package legoline.hardware;
 import java.io.IOException;
 import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;

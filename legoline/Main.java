@@ -1,9 +1,10 @@
+package legoline;
 import java.awt.*;
 import java.io.IOException;
 import javax.swing.*;
 
-import hardware.*;
-import ui.*;
+import legoline.hardware.*;
+import legoline.ui.*;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = -5025003895547053468L;
