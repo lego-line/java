@@ -28,6 +28,7 @@ public class Belt implements AutoCloseable {
 	
 	public void advance(float studs) {
 		motor.rotate((int)(degreesPerStud() * studs));
+		motor.flt();
 	}
 	
 	public void enable() {
@@ -36,6 +37,10 @@ public class Belt implements AutoCloseable {
 	
 	public void disable() {
 		motor.flt();
+	}
+	
+	public boolean isMoving() {
+		return motor.isMoving();
 	}
 	
 	public float position() {

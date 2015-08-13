@@ -44,6 +44,9 @@ public class Junction implements AutoCloseable {
 
 		pusher.setSpeed(180);
 		pusher.rotateTo(-140);
+		if(!mainBelt.isMoving()) {
+			mainBelt.advance(1.0f);
+		}
 		pusher.rotateTo(0);
 		pusher.flt();
 	}
