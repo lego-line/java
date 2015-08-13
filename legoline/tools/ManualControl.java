@@ -1,4 +1,4 @@
-package legoline;
+package legoline.tools;
 import java.awt.*;
 import java.io.IOException;
 import javax.swing.*;
@@ -6,14 +6,14 @@ import javax.swing.*;
 import legoline.hardware.*;
 import legoline.ui.*;
 
-public class Main extends JFrame {
+public class ManualControl extends JFrame {
 	private static final long serialVersionUID = -5025003895547053468L;
 
 	public static void main(String[] args) throws InterruptedException, IOException {
-        new Main().setVisible(true);
+        new ManualControl().setVisible(true);
     }
     
-    public Main() throws InterruptedException, IOException {
+    public ManualControl() throws InterruptedException, IOException {
     	line = LegoLine.createFromConnectedNXTs();
 		initComponents();
 		line.initialize();
