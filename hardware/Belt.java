@@ -52,6 +52,9 @@ public class Belt implements AutoCloseable {
 	public float getMaxSpeed() {
 		return motor.getMaxSpeed() / degreesPerStud();
 	}
+	public float getFullyChargedMaxSpeed() {
+		return 900 / degreesPerStud();
+	}
 
 	@Override
 	public void close() {

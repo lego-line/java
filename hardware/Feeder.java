@@ -4,7 +4,6 @@ import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteMotorPort;
-import lejos.robotics.MirrorMotor;
 
 public class Feeder implements AutoCloseable {
 	public RemoteMotor feeder;

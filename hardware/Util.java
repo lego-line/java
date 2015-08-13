@@ -1,8 +1,5 @@
 package hardware;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import lejos.robotics.Encoder;
 
 public class Util {	
