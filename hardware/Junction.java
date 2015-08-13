@@ -1,3 +1,4 @@
+package hardware;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 

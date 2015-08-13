@@ -1,7 +1,4 @@
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -9,14 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.event.*;
 
-import lejos.nxt.Motor;
+import hardware.*;
+import ui.FeederPanel;
 import lejos.nxt.remote.*;
 import lejos.pc.comm.*;
 
 public class Main extends JFrame {
-    public static void main(String[] args) throws InterruptedException {
+	private static final long serialVersionUID = -5025003895547053468L;
+
+	public static void main(String[] args) throws InterruptedException {
         new Main().setVisible(true);
     }
     
@@ -25,11 +25,32 @@ public class Main extends JFrame {
 		initComponents();
     }
     
-	Feeder feed;
-	Junction junc;
+	final List<Feeder> feeds = new ArrayList<>();
+	final List<Junction> juncs = new ArrayList<>();
     
-	public void findBricks() throws InterruptedException  {		
+	public void findBricks() throws InterruptedException {	
+		final List<NXTComm> toClose = new ArrayList<>();
+		
+		final List<NXTInfo> connected = new ArrayList<>();
+		final List<NXTInfo> busy = new ArrayList<>();
+		
 		for (NXTInfo nxtInfo : new NXTConnectionManager().search()) {
+			if (nxtInfo.name.equals("Unknown"))
+				busy.add(nxtInfo);
+			else
+				connected.add(nxtInfo);
+		}
+		
+		if (busy.size() != 0) {
+			System.out.println("Found " + busy.size() + " bricks that are in use elsewhere");
+		}
+		
+		if (connected.size() == 0) {
+			System.err.println("No bricks found");
+			return;
+		}
+		
+		for (NXTInfo nxtInfo : connected) {			
 			NXTComm comm;
 			try {
 				comm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
@@ -40,42 +61,53 @@ public class Main extends JFrame {
 			NXTCommand command = new NXTCommand(comm);
 			
 			if (nxtInfo.name.startsWith("Feeder")) {
-				feed = new Feeder(command);
+				feeds.add(new Feeder(command));
+				toClose.add(comm);
 			}
 			else if (nxtInfo.name.startsWith("Merge")) {
-				junc = new Junction(command);
+				juncs.add(new Junction(command));
+				toClose.add(comm);
 			}
 			else {
 				try {
 					System.out.println("Renaming brick");
 					command.setFriendlyName("Merge");
 					command.disconnect();
+					comm.close();
 				} catch (IOException e) { }
 			}
-		}		
+		}
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    @Override
+		    public void run() {
+		    	for (Feeder feed : feeds) {
+					try {
+						feed.close();
+					} catch (IOException e) { }
+		    	}
+		   
+		        for (NXTComm nxtComm : toClose) {
+					try {
+						nxtComm.close();
+					} catch (IOException e) { }
+				}
+		    }
+		});
 	}
 	
 	private void initComponents() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception e1) {
+		} catch (Exception e) {
 			System.err.println("Could not load native theme");
 		}
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setTitle("Feeder control");
-		
-		JButton button = new JButton("Feed");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(feed != null) {
-					feed.feed();
-				}
-			}
-		});
-		button.setEnabled(feed != null);
-        getContentPane().add(button);
+		setTitle("Legoline control");
+		setLayout(new FlowLayout());
+		for (Feeder feeder : feeds)
+			add(new FeederPanel(feeder));
 		pack();
 	}
 }
