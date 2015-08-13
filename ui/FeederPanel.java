@@ -33,14 +33,14 @@ public class FeederPanel extends JPanel {
 			add(button);
 		}
 		{
-			final JButton button = new JButton("Convey");
+			final JToggleButton button = new JToggleButton("Convey");
 			button.getModel().addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    if (button.getModel().isPressed()) {
+                    if (button.getModel().isSelected()) {
                         feed.belt.forward();
                     } else {
-                        feed.belt.stop();
+                        feed.belt.flt();
                     }
                 }
             });
