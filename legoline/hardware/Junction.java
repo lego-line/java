@@ -18,8 +18,8 @@ public class Junction implements AutoCloseable {
 		this.conn = conn;
 		
 		pusher   = new RemoteMotor(conn, 0);  // port A
-		sideBelt = new Belt(new RemoteMotor(conn, 1));  // port C
-		mainBelt = new Belt(MirrorMotor.invertMotor(new RemoteMotor(conn, 2)));  // port C
+		sideBelt = new Belt(new RemoteMotor(conn, 1), 21);  // port C
+		mainBelt = new Belt(MirrorMotor.invertMotor(new RemoteMotor(conn, 2)), 27);  // port C
 	}
 
 	public void reset() throws InterruptedException {

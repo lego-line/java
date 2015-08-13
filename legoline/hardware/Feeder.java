@@ -14,7 +14,7 @@ public class Feeder implements AutoCloseable {
 	
 	public Feeder(NXTCommand conn) {
 		feeder = new RemoteMotor(conn, 0);  // port A
-		belt = new Belt(new RemoteMotor(conn, 1)); // port B
+		belt = new Belt(new RemoteMotor(conn, 1), 18); // port B
 		this.conn = conn;
 	}
 	
