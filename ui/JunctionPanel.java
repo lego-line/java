@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -15,21 +14,51 @@ public class JunctionPanel extends JPanel {
 		this.junc = junction;
 
 		setBorder(BorderFactory.createTitledBorder("Junction"));
-		setLayout(new FlowLayout());
+		
+		
+		final JButton button;
 		{
-			final JButton button = new JButton("Transfer");
+			button = new JButton("Transfer");
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent event) {
-					try {
-						junc.transfer();
-					} catch (InterruptedException e) { }
+					new SwingWorker<Void, Void>() {
+						@Override
+						protected Void doInBackground() throws Exception {
+							try {
+								junc.transfer();
+							} catch (InterruptedException e) { }
+							return null;
+						}
+					}.execute();
 				}
 			});
 			add(button);
 		}
-		add(new BeltPanel(junc.sideBelt, "sideline"));
-		add(new BeltPanel(junc.mainBelt, "mainline"));
+		JPanel side = new BeltPanel(junc.sideBelt, "sideline");
+		JPanel main = new BeltPanel(junc.mainBelt, "mainline");
+		
+		add(side);
+		add(main);
+		
+		GroupLayout layout = new GroupLayout(this);
+		layout.setAutoCreateGaps(true);
+		setLayout(layout);
+		
+		layout.setHorizontalGroup(layout.createSequentialGroup()
+			.addComponent(button)
+			.addGroup(layout.createParallelGroup()
+				.addComponent(side)
+				.addComponent(main)
+			)
+		);
+		layout.setVerticalGroup(layout.createParallelGroup()
+			.addComponent(button, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+			.addGroup(layout.createSequentialGroup()
+				.addComponent(side)
+				.addComponent(main)
+			)
+		);
 	}
 	
 }
