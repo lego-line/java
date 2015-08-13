@@ -19,7 +19,7 @@ public class Belt implements AutoCloseable {
 	}
 	
 	private float degreesPerStud() {
-		return 360 / (CHAIN_LENGTH * SPROCKET_TEETH) / gearRatio;
+		return 360f / (CHAIN_LENGTH * SPROCKET_TEETH) / gearRatio;
 	}
 	
 	public void setSpeed(float studsPerSecond) {
@@ -43,8 +43,14 @@ public class Belt implements AutoCloseable {
 		return motor.isMoving();
 	}
 	
-	public float position() {
+	public float getPosition() {
 		return motor.getTachoCount() / degreesPerStud();
+	}
+	public float getSpeed() {
+		return motor.getSpeed() / degreesPerStud();
+	}
+	public float getMaxSpeed() {
+		return motor.getMaxSpeed() / degreesPerStud();
 	}
 
 	@Override

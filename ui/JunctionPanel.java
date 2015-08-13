@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
 import hardware.Junction;
 
 public class JunctionPanel extends JPanel {
@@ -30,34 +28,8 @@ public class JunctionPanel extends JPanel {
 			});
 			add(button);
 		}
-		{
-			final JToggleButton button = new JToggleButton("Convey sideline");
-			button.getModel().addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    if (button.getModel().isSelected()) {
-                        junc.sideBelt.enable();
-                    } else {
-                        junc.sideBelt.disable();
-                    }
-                }
-            });
-			add(button);
-		}
-		{
-			final JToggleButton button = new JToggleButton("Convey mainline");
-			button.getModel().addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    if (button.getModel().isSelected()) {
-                        junc.mainBelt.enable();
-                    } else {
-                        junc.mainBelt.disable();
-                    }
-                }
-            });
-			add(button);
-		}
+		add(new BeltPanel(junc.sideBelt, "sideline"));
+		add(new BeltPanel(junc.mainBelt, "mainline"));
 	}
 	
 }

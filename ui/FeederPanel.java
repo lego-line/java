@@ -32,20 +32,7 @@ public class FeederPanel extends JPanel {
 			button.setEnabled(feed != null);
 			add(button);
 		}
-		{
-			final JToggleButton button = new JToggleButton("Convey");
-			button.getModel().addChangeListener(new ChangeListener() {
-                @Override
-                public void stateChanged(ChangeEvent e) {
-                    if (button.getModel().isSelected()) {
-                        feed.belt.enable();
-                    } else {
-                        feed.belt.disable();
-                    }
-                }
-            });
-			add(button);
-		}
+		add(new BeltPanel(feed.belt, null));
 	}
 	
 }
