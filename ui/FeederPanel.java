@@ -38,9 +38,9 @@ public class FeederPanel extends JPanel {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     if (button.getModel().isSelected()) {
-                        feed.belt.forward();
+                        feed.belt.enable();
                     } else {
-                        feed.belt.flt();
+                        feed.belt.disable();
                     }
                 }
             });

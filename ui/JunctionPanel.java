@@ -36,9 +36,9 @@ public class JunctionPanel extends JPanel {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     if (button.getModel().isSelected()) {
-                        junc.sideBelt.forward();
+                        junc.sideBelt.enable();
                     } else {
-                        junc.sideBelt.flt();
+                        junc.sideBelt.disable();
                     }
                 }
             });
@@ -50,9 +50,9 @@ public class JunctionPanel extends JPanel {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     if (button.getModel().isSelected()) {
-                        junc.mainBelt.backward();
+                        junc.mainBelt.enable();
                     } else {
-                        junc.mainBelt.flt();
+                        junc.mainBelt.disable();
                     }
                 }
             });

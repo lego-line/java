@@ -4,10 +4,11 @@ import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteMotorPort;
+import lejos.robotics.MirrorMotor;
 
 public class Junction implements AutoCloseable {
-	public RemoteMotor sideBelt;
-	public RemoteMotor mainBelt;
+	public Belt sideBelt;
+	public Belt mainBelt;
 	public RemoteMotor pusher;
 	
 	private NXTCommand conn;
@@ -17,8 +18,8 @@ public class Junction implements AutoCloseable {
 		this.conn = conn;
 		
 		pusher   = new RemoteMotor(conn, 0);  // port A
-		sideBelt = new RemoteMotor(conn, 1);  // port C
-		mainBelt = new RemoteMotor(conn, 2);  // port C
+		sideBelt = new Belt(new RemoteMotor(conn, 1));  // port C
+		mainBelt = new Belt(MirrorMotor.invertMotor(new RemoteMotor(conn, 2)));  // port C
 	}
 
 	public void reset() throws InterruptedException {
@@ -50,8 +51,8 @@ public class Junction implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		pusher.flt();
-		sideBelt.flt();
-		mainBelt.flt();
+		sideBelt.close();
+		mainBelt.close();
 		conn.disconnect();
 	}
 

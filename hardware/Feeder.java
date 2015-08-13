@@ -4,17 +4,18 @@ import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteMotorPort;
+import lejos.robotics.MirrorMotor;
 
 public class Feeder implements AutoCloseable {
 	public RemoteMotor feeder;
-	public RemoteMotor belt;
+	public Belt belt;
 	
 	private NXTCommand conn;
 	private boolean isZeroed = false;
 	
 	public Feeder(NXTCommand conn) {
 		feeder = new RemoteMotor(conn, 0);  // port A
-		belt = new RemoteMotor(conn, 1);  // port B
+		belt = new Belt(new RemoteMotor(conn, 1)); // port B
 		this.conn = conn;
 	}
 	
@@ -48,7 +49,7 @@ public class Feeder implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		feeder.flt();
-		belt.flt();
+		belt.close();
 		conn.disconnect();
 	}
 }
