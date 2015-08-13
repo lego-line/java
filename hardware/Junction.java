@@ -1,7 +1,5 @@
 package hardware;
 import java.io.IOException;
-
-import lejos.nxt.BasicMotor;
 import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
@@ -13,14 +11,17 @@ public class Junction implements AutoCloseable {
 	public RemoteMotor pusher;
 	
 	private NXTCommand conn;
+	private boolean isZeroed = false;
 	
-	public Junction(NXTCommand conn) throws InterruptedException {
+	public Junction(NXTCommand conn) {
 		this.conn = conn;
 		
 		pusher   = new RemoteMotor(conn, 0);  // port A
 		sideBelt = new RemoteMotor(conn, 1);  // port C
 		mainBelt = new RemoteMotor(conn, 2);  // port C
-		
+	}
+
+	public void reset() throws InterruptedException {
 		// first, get an unregulated copy of pusher, and zero it
 		NXTMotor temp = new NXTMotor(new RemoteMotorPort(conn, 0));
 		temp.setPower(25);
@@ -33,9 +34,13 @@ public class Junction implements AutoCloseable {
 		pusher.rotate(-25);
 		pusher.resetTachoCount();
 		pusher.flt();
+		
+		isZeroed = true;
 	}
 	
 	public void transfer() throws InterruptedException {
+		if(!isZeroed) throw new IllegalStateException("Must reset first");
+
 		pusher.setSpeed(180);
 		pusher.rotateTo(-140);
 		pusher.rotateTo(0);
