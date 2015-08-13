@@ -1,4 +1,4 @@
-/Feeder.class
-/Junction.class
-/Main$1.class
-/Main.class
+*.class
+*.nxd
+*.nxj
+*/.gitignore  # eclipse autogenerates these
