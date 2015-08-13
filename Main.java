@@ -1,15 +1,13 @@
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 import hardware.*;
-import ui.FeederPanel;
+import ui.*;
 import lejos.nxt.remote.*;
 import lejos.pc.comm.*;
 
@@ -86,6 +84,12 @@ public class Main extends JFrame {
 						feed.close();
 					} catch (IOException e) { }
 		    	}
+		    	
+		    	for (Junction junc : juncs) {
+					try {
+						junc.close();
+					} catch (IOException e) { }
+		    	}
 		   
 		        for (NXTComm nxtComm : toClose) {
 					try {
@@ -105,9 +109,13 @@ public class Main extends JFrame {
 
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Legoline control");
-		setLayout(new FlowLayout());
+		
+		final Container content = getContentPane();
+		content.setLayout(new BoxLayout(content, BoxLayout.PAGE_AXIS));
 		for (Feeder feeder : feeds)
-			add(new FeederPanel(feeder));
+			content.add(new FeederPanel(feeder));
+		for (Junction junction : juncs)
+			content.add(new JunctionPanel(junction));
 		pack();
 	}
 }

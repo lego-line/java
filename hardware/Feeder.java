@@ -4,7 +4,7 @@ import java.io.IOException;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 
-public class Feeder {
+public class Feeder implements AutoCloseable {
 	public RemoteMotor feeder;
 	public RemoteMotor belt;
 	
@@ -17,7 +17,7 @@ public class Feeder {
 		
 		// reset the feeder
 		feeder.setPower(25);
-		feeder.rotate(180, false);
+		feeder.forward();
 		Thread.sleep(500);
 		feeder.stop();
 		feeder.rotate(-50);  // this is how much the axle bends by!
