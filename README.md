@@ -29,8 +29,12 @@ There is a patched LeJOS version at https://github.com/lego-line/lejos. This pat
 
 A build of the patch version is committed in the [`snapshot`](https://github.com/lego-line/lejos/tree/master/snapshot) directory. Download this directory to your computer.
 
+You'll then need to run `snapshot/bin/flashg.bat` to program the NXT with the snapshot firmware.
+Finally, the eclipse plugin should be pointed at this snapshot directory.
 
 #### Rebuilding the snapshot
+
+**This shouldn't be necessary, normally**
 
 To rebuild the patched version, check out the git repository from above, and import the "snapshot" project into eclipse. Then right click on the build.xml file within the project, and hit "Run as → Ant build".
 This will rebuild the snapshot.
