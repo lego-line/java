@@ -1,5 +1,15 @@
 # Software for the lego line written in LeJOS NXJ
 
+This is an attempt at replacing the current matlab code, which has faults including:
+* Poor error handling
+* A lack of structured data, leading to lots of string parsing
+* requiring multiple open instances of matlab
+* inability to be run locally on the bricks
+
+With code written in java.
+
+Currently, the software is designed to be run completely PC side. In future, it would be sensible to distribute the code between bricks and PC, and device a custom communication protocol between them, as the <acronym title="Lego Communication Protocol">LCP</acronym> used normally is somewhat restrictive.
+
 ## Getting set up
 
 * Install the [Eclipse IDE for java developers](http://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/marsr)
