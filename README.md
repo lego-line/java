@@ -27,10 +27,14 @@ There is a patched LeJOS version at https://github.com/lego-line/lejos. This pat
 * Making remote control threadsafe
 * Allowing motors to be used in unregulated mode  (ie for intentional stalling)
 
-To build the patched version, check out the git repository from above, and import the "snapshot" project into eclipse.
-Then right click on the build.xml file within the project, and hit "Run as → Ant build".
-This will rebuild the snapshot. You'll then need to run `snapshot/bin/flashg.bat` to program the NXT with the snapshot firmware.
-Finally, the eclipse plugin should be pointed at this snapshot directory
+A build of the patch version is committed in the [`snapshot`](https://github.com/lego-line/lejos/tree/master/snapshot) directory. Download this directory to your computer.
+
+
+#### Rebuilding the snapshot
+
+To rebuild the patched version, check out the git repository from above, and import the "snapshot" project into eclipse. Then right click on the build.xml file within the project, and hit "Run as → Ant build".
+This will rebuild the snapshot.
+
 
 ## Running the sample
 
