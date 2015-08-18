@@ -12,5 +12,5 @@ public class Util {
 				break;
 			lastTachoCount = nextTachoCount;
 		}
-	}
+	};
 }

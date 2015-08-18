@@ -2,6 +2,7 @@ package legoline.hardware;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,14 +71,23 @@ public class Belt implements AutoCloseable {
 		updatePacketList(start);
 	}
 	private void updatePacketList(float position) {
-		for (Map.Entry<Pallet, Float> e : palletPositions.entrySet()) {
+		Iterator<Map.Entry<Pallet, Float>> iter = palletPositions.entrySet().iterator();
+		while(iter.hasNext()) {
+			Map.Entry<Pallet, Float> e = iter.next();
 			if(position - e.getValue() > length)
-				palletPositions.remove(e.getKey());
+				iter.remove();
 		}
 	}
-	public Set<Map.Entry<Pallet, Float>> getActivePallets() {
+	public Map<Pallet, Float> getActivePallets() {
+		float pos = getPosition();
 		updatePacketList(getPosition());
-		return palletPositions.entrySet();
+		
+		Map<Pallet, Float> worldPositions = new HashMap<>();
+		for (Map.Entry<Pallet, Float> e : palletPositions.entrySet()) {
+			worldPositions.put(e.getKey(), pos - e.getValue());
+		}
+		
+		return worldPositions;
 	}
 
 	// cleanup code

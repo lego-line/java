@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import legoline.hardware.Feeder;
+import legoline.hardware.ObjectDetector;
 
 public class FeederPanel extends JPanel {
 	private static final long serialVersionUID = -7651630967299290601L;
@@ -41,16 +42,33 @@ public class FeederPanel extends JPanel {
 		add(inSensorLabel);
 		final JLabel inSensorReading = new JLabel();
 		add(inSensorReading);
+		final JCheckBox inSensorPresent = new JCheckBox("pallet?");
+		inSensorPresent.setEnabled(false);
+		add(inSensorPresent);
+
 		final JLabel outSensorLabel = new JLabel("Out:");
 		add(outSensorLabel);
 		final JLabel outSensorReading = new JLabel();
 		add(outSensorReading);
+		final JCheckBox outSensorPresent = new JCheckBox("pallet?");
+		outSensorPresent.setEnabled(false);
+		add(outSensorPresent);
 		
 		new Timer(50, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				inSensorReading.setText("" + feed.inSensor.getLightValue());
-				outSensorReading.setText("" + feed.outSensor.getLightValue());
+				try{
+					boolean palletIn = feed.inSensor.hasObject();
+					boolean palletOut = feed.outSensor.hasObject();
+					inSensorPresent.setSelected(palletIn);
+					outSensorPresent.setSelected(palletOut);
+					
+					ObjectDetector.ReadingPair in = feed.inSensor.getLastReading();
+					ObjectDetector.ReadingPair out = feed.outSensor.getLastReading();
+					inSensorReading.setText(in.lit + ", " + in.unlit);
+					outSensorReading.setText(out.lit + ", " + out.unlit);
+				}
+				catch(InterruptedException ie) { }
 			}
 		}).start();
 		
@@ -73,6 +91,10 @@ public class FeederPanel extends JPanel {
 					.addComponent(inSensorReading)
 					.addComponent(outSensorReading)
 				)
+				.addGroup(layout.createParallelGroup()
+					.addComponent(inSensorPresent)
+					.addComponent(outSensorPresent)
+				)
 			)
 		);
 		layout.setVerticalGroup(layout.createParallelGroup()
@@ -82,10 +104,12 @@ public class FeederPanel extends JPanel {
 				.addGroup(layout.createParallelGroup()
 					.addComponent(inSensorLabel)
 					.addComponent(inSensorReading)
+					.addComponent(inSensorPresent)
 				)
 				.addGroup(layout.createParallelGroup()
 					.addComponent(outSensorLabel)
 					.addComponent(outSensorReading)
+					.addComponent(outSensorPresent)
 				)
 			)
 		);

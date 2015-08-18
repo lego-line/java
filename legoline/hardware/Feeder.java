@@ -3,20 +3,22 @@ import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import legoline.Pallet;
 import lejos.nxt.LightSensor;
 import lejos.nxt.NXTMotor;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteMotorPort;
 import lejos.nxt.remote.RemoteSensorPort;
+import lejos.robotics.LampLightDetector;
 import lejos.robotics.LightDetector;
 
 public class Feeder implements AutoCloseable {
 	public RemoteMotor feeder;
 	public Belt belt;
 	
-	public LightDetector inSensor;
-	public LightDetector outSensor;
+	public ObjectDetector inSensor;
+	public ObjectDetector outSensor;
 	
 	private NXTCommand conn;
 	private boolean isZeroed = false;
@@ -25,8 +27,16 @@ public class Feeder implements AutoCloseable {
 		feeder = new RemoteMotor(conn, 0);  // port A
 		belt = new Belt(new RemoteMotor(conn, 1), 18); // port B
 		
-		inSensor = new LightSensor(new RemoteSensorPort(conn, 0));   // port 1
-		outSensor = new LightSensor(new RemoteSensorPort(conn, 1));  // port 2
+		inSensor = new ObjectDetector(
+			new LightSensor(new RemoteSensorPort(conn, 0)),   // port 1
+			new ObjectDetector.ReadingPair(430, 270),
+			new ObjectDetector.ReadingPair(425, 240)
+		);
+		outSensor =  new ObjectDetector(
+			new LightSensor(new RemoteSensorPort(conn, 1)),  // port 2
+			new ObjectDetector.ReadingPair(410, 400),
+			new ObjectDetector.ReadingPair(480, 290)
+		);
 				
 		this.conn = conn;
 	}
@@ -57,6 +67,8 @@ public class Feeder implements AutoCloseable {
 		feeder.setSpeed(180);
 		feeder.rotateTo(0);
 		feeder.flt();
+		
+		belt.palletAdded(new Pallet());
 	}
 	
 	@Override
