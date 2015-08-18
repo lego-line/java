@@ -7,7 +7,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 
 import lejos.nxt.remote.NXTCommand;
-import lejos.pc.comm.NXTComm;
+import lejos.nxt.remote.NXTComm;
 import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTConnectionManager;
