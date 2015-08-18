@@ -26,7 +26,7 @@ public class Feeder implements AutoCloseable {
 		belt = new Belt(new RemoteMotor(conn, 1), 18); // port B
 		
 		inSensor = new LightSensor(new RemoteSensorPort(conn, 0));   // port 1
-		outSensor = new LightSensor(new RemoteSensorPort(conn, 0));  // port 2
+		outSensor = new LightSensor(new RemoteSensorPort(conn, 1));  // port 2
 				
 		this.conn = conn;
 	}

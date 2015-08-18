@@ -36,6 +36,24 @@ public class FeederPanel extends JPanel {
 			button.setEnabled(feed != null);
 			add(button);
 		}
+		
+		final JLabel inSensorLabel = new JLabel("In:");
+		add(inSensorLabel);
+		final JLabel inSensorReading = new JLabel();
+		add(inSensorReading);
+		final JLabel outSensorLabel = new JLabel("Out:");
+		add(outSensorLabel);
+		final JLabel outSensorReading = new JLabel();
+		add(outSensorReading);
+		
+		new Timer(50, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				inSensorReading.setText("" + feed.inSensor.getLightValue());
+				outSensorReading.setText("" + feed.outSensor.getLightValue());
+			}
+		}).start();
+		
 		JPanel belt = new BeltPanel(feed.belt, null);
 		add(belt);		
 
@@ -46,10 +64,30 @@ public class FeederPanel extends JPanel {
 		layout.setHorizontalGroup(layout.createSequentialGroup()
 			.addComponent(button)
 			.addComponent(belt)
+			.addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+					.addComponent(inSensorLabel)
+					.addComponent(outSensorLabel)
+				)
+				.addGroup(layout.createParallelGroup()
+					.addComponent(inSensorReading)
+					.addComponent(outSensorReading)
+				)
+			)
 		);
 		layout.setVerticalGroup(layout.createParallelGroup()
 			.addComponent(button, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 			.addComponent(belt)
+			.addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+					.addComponent(inSensorLabel)
+					.addComponent(inSensorReading)
+				)
+				.addGroup(layout.createParallelGroup()
+					.addComponent(outSensorLabel)
+					.addComponent(outSensorReading)
+				)
+			)
 		);
 	}
 	
