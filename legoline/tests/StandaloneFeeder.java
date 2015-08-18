@@ -1,6 +1,9 @@
 package legoline.tests;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 import legoline.Pallet;
 import legoline.hardware.*;
 
@@ -23,9 +26,12 @@ public class StandaloneFeeder {
 				
 				// wait for the previous run to clear
 				while(true) {
-					float closest = Float.POSITIVE_INFINITY;
-					for (Map.Entry<Pallet, Float> e : f.belt.getActivePallets().entrySet()) {
-						closest = Math.min(closest, e.getValue());
+					float closest;
+					try {
+						closest = Collections.min(f.belt.getActivePallets().values());
+					}
+					catch (NoSuchElementException e) {
+						closest = Float.POSITIVE_INFINITY;
 					}
 					
 					if(closest + feedDelay * speed > palletSpacing) break;					
