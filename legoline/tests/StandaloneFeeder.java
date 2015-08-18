@@ -25,17 +25,8 @@ public class StandaloneFeeder {
 				f.belt.enable();
 				
 				// wait for the previous run to clear
-				while(true) {
-					float closest;
-					try {
-						closest = Collections.min(f.belt.getActivePallets().values());
-					}
-					catch (NoSuchElementException e) {
-						closest = Float.POSITIVE_INFINITY;
-					}
-					
-					if(closest + feedDelay * speed > palletSpacing) break;					
-				}
+				while(f.belt.leadingSpace() + feedDelay * speed < palletSpacing)
+					Thread.yield();
 				
 				// spit out pallets at time intervals
 				long last = Long.MIN_VALUE;
@@ -46,11 +37,13 @@ public class StandaloneFeeder {
 						feedDelay = (System.currentTimeMillis() - now) / 1000f;
 						last = now;
 					}
+					Thread.yield();
 				}
 				f.belt.disable();
 				
 				// wait for the end to clear
-				while(f.outSensor.hasObject());
+				while(f.outSensor.hasObject())
+					Thread.yield();
 			}
 		}
 	}

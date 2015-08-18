@@ -1,9 +1,11 @@
 package legoline.hardware;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import legoline.Pallet;
@@ -78,6 +80,7 @@ public class Belt implements AutoCloseable {
 				iter.remove();
 		}
 	}
+	
 	public Map<Pallet, Float> getActivePallets() {
 		float pos = getPosition();
 		updatePacketList(getPosition());
@@ -88,6 +91,15 @@ public class Belt implements AutoCloseable {
 		}
 		
 		return worldPositions;
+	}
+	
+	public float leadingSpace() {
+		try {
+			return getPosition() - Collections.max(palletPositions.values());
+		}
+		catch (NoSuchElementException e) {
+			return Float.POSITIVE_INFINITY;
+		}
 	}
 
 	// cleanup code
