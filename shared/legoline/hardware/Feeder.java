@@ -1,20 +1,23 @@
 package legoline.hardware;
 import java.io.IOException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import legoline.Pallet;
+import lejos.nxt.ADSensorPort;
 import lejos.nxt.LightSensor;
+import lejos.nxt.Motor;
+import lejos.nxt.MotorPort;
 import lejos.nxt.NXTMotor;
+import lejos.nxt.SensorPort;
 import lejos.nxt.remote.NXTCommand;
 import lejos.nxt.remote.RemoteMotor;
 import lejos.nxt.remote.RemoteMotorPort;
 import lejos.nxt.remote.RemoteSensorPort;
-import lejos.robotics.LampLightDetector;
-import lejos.robotics.LightDetector;
+import lejos.robotics.EncoderMotor;
+import lejos.robotics.RegulatedMotor;
 
 public class Feeder implements AutoCloseable {
-	public RemoteMotor feeder;
+	public RegulatedMotor feeder;
+	public EncoderMotor feederRaw;
 	public Belt belt;
 	
 	public ObjectDetector inSensor;
@@ -23,31 +26,56 @@ public class Feeder implements AutoCloseable {
 	private NXTCommand conn;
 	private boolean isZeroed = false;
 	
+	
 	public Feeder(NXTCommand conn) {
-		feeder = new RemoteMotor(conn, 0);  // port A
-		belt = new Belt(new RemoteMotor(conn, 1), 18); // port B
+		RegulatedMotor beltMotor;
+		ADSensorPort inPort;
+		ADSensorPort outPort;
 		
+		// switch between remote and local cases
+		if(conn == null) {
+			feeder = Motor.A;
+			feederRaw = new NXTMotor(MotorPort.A);
+			beltMotor = Motor.B;
+			inPort = SensorPort.S1;
+			outPort = SensorPort.S2;
+		}
+		else {
+			feeder = new RemoteMotor(conn, 0);
+			feederRaw = new NXTMotor(new RemoteMotorPort(conn, 0));
+			beltMotor = new RemoteMotor(conn, 1);
+			inPort = new RemoteSensorPort(conn, 0);
+			outPort = new RemoteSensorPort(conn, 1);
+		}
+		
+		belt = new Belt(beltMotor, 18);
 		inSensor = new ObjectDetector(
-			new LightSensor(new RemoteSensorPort(conn, 0)),   // port 1
+			new LightSensor(inPort),
 			new ObjectDetector.ReadingPair(430, 270),
 			new ObjectDetector.ReadingPair(425, 240)
 		);
 		outSensor =  new ObjectDetector(
-			new LightSensor(new RemoteSensorPort(conn, 1)),  // port 2
+			new LightSensor(outPort),
 			new ObjectDetector.ReadingPair(410, 400),
 			new ObjectDetector.ReadingPair(480, 290)
 		);
 				
 		this.conn = conn;
+		
+
+		if(conn == null && feeder instanceof RemoteMotor)
+			System.err.println(
+				"Warning: local constructor called in remote environment" +
+				"- using default remote NXT"
+			);
 	}
 	
 	public void reset() throws InterruptedException {
 		// first, get an unregulated copy of pusher, and zero it
-		NXTMotor temp = new NXTMotor(new RemoteMotorPort(conn, 0));
-		temp.setPower(25);
-		temp.forward();
-		Util.waitForStall(temp);
-		temp.stop();
+		feederRaw.setPower(25);
+		feederRaw.forward();
+		Util.waitForStall(feederRaw);
+		feederRaw.stop();
 		
 		// now unbend the axle
 		feeder.setSpeed(180);
@@ -75,6 +103,6 @@ public class Feeder implements AutoCloseable {
 	public void close() throws IOException {
 		feeder.flt();
 		belt.close();
-		conn.disconnect();
+		if(conn != null) conn.disconnect();
 	}
 }

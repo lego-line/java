@@ -1,10 +1,5 @@
 package legoline.tests;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import legoline.Pallet;
 import legoline.hardware.*;
 
 public class StandaloneFeeder {

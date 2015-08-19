@@ -1,13 +1,9 @@
 package legoline.hardware;
 import java.util.Collections;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Set;
-
 import legoline.Pallet;
 import lejos.robotics.RegulatedMotor;
 
@@ -21,7 +17,7 @@ public class Belt implements AutoCloseable {
 	private static final float SPROCKET_TEETH = 6;
 	private static final float CHAIN_LENGTH = 1.5f;
 	
-	private final HashMap<Pallet, Float> palletPositions = new HashMap<>();
+	private final Map<Pallet, Float> palletPositions = new HashMap<>();
 	
 	Belt(RegulatedMotor motor, float length) {
 		this.length = length;

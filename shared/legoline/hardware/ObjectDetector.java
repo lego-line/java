@@ -1,6 +1,5 @@
 package legoline.hardware;
 
-import lejos.nxt.ADSensorPort;
 import lejos.robotics.LampLightDetector;
 
 public class ObjectDetector {
