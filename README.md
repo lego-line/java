@@ -1,4 +1,4 @@
-# Software for the lego line written in LeJOS NXJ
+﻿# Software for the lego line written in LeJOS NXJ
 
 This is an attempt at replacing the current matlab code, which has faults including:
 * Poor error handling
@@ -8,7 +8,18 @@ This is an attempt at replacing the current matlab code, which has faults includ
 
 With code written in java.
 
-Currently, the software is designed to be run completely PC side. In future, it would be sensible to distribute the code between bricks and PC, and device a custom communication protocol between them, as the <acronym title="Lego Communication Protocol">LCP</acronym> used normally is somewhat restrictive.
+## Code structure
+
+There are three folders in the root of the repo - remote, local, and shared
+
+* `remote` - code to be run on a PC to remote-control the entire line at once over the LCP protocol. Can make use of GUIs and advanced threading APIs. 
+* `local` - code to be run on the NXT bricks, without a PC connection
+* `shared` - code that is used by both situations.
+  Note that the _source_ is being shared, not the binary.
+  This is important, as sometimes a class of the same name does not have the same members in the LeJOS API as it does on the PC side.
+  When writing this code, try to use the lejos.robotics interfaces as much as possible, as interfaces are the same on both sides
+
+The first two contain eclipse projects, which automatically load up the shared folder
 
 ## Getting set up
 
