@@ -88,10 +88,19 @@ public class Belt implements AutoCloseable {
 		
 		return worldPositions;
 	}
-	
+
 	public float leadingSpace() {
 		try {
 			return getPosition() - Collections.max(palletPositions.values());
+		}
+		catch (NoSuchElementException e) {
+			return Float.POSITIVE_INFINITY;
+		}
+	}
+	
+	public float trailingSpace() {
+		try {
+			return length - (getPosition() - Collections.min(palletPositions.values()));
 		}
 		catch (NoSuchElementException e) {
 			return Float.POSITIVE_INFINITY;
@@ -102,5 +111,9 @@ public class Belt implements AutoCloseable {
 	@Override
 	public void close() {
 		disable();		
+	}
+
+	public void popPallets() {
+		updatePacketList(getPosition());		
 	}
 }
