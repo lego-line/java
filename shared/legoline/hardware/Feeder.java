@@ -54,11 +54,7 @@ public class Feeder implements AutoCloseable {
 			new ObjectDetector.ReadingPair(430, 270),
 			new ObjectDetector.ReadingPair(425, 240)
 		);
-		outSensor =  new ObjectDetector(
-			new LightSensor(outPort),
-			new ObjectDetector.ReadingPair(410, 400),
-			new ObjectDetector.ReadingPair(480, 290)
-		);
+		outSensor = ObjectDetector.upwardsFacing(new LightSensor(outPort));
 				
 		this.conn = conn;
 		

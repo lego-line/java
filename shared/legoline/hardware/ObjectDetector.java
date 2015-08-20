@@ -54,4 +54,13 @@ public class ObjectDetector {
 		return new ReadingPair(lit, unlit);
 	}
 	
+	public static ObjectDetector upwardsFacing(LampLightDetector sensor) {
+		return new ObjectDetector(
+			sensor,
+			new ObjectDetector.ReadingPair(410, 400),
+			new ObjectDetector.ReadingPair(480, 290)
+		);
+							
+	}
+	
 }
