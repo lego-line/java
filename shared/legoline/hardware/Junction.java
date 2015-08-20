@@ -27,24 +27,24 @@ public class Junction implements AutoCloseable {
 	
 		// switch between remote and local cases
 		if(conn == null) {
-			pusher = Motor.A;
-			pusherRaw = new NXTMotor(MotorPort.A);
-			sideBeltMotor = Motor.B;
+			sideBeltMotor = Motor.A;
+			pusher = Motor.B;
+			pusherRaw = new NXTMotor(MotorPort.B);
 			mainBeltMotor = Motor.C;
 		}
 		else {
-			pusher = new RemoteMotor(conn, 0);
-			pusherRaw =  new NXTMotor(new RemoteMotorPort(conn, 0));
-			sideBeltMotor = new RemoteMotor(conn, 1);
+			sideBeltMotor = new RemoteMotor(conn, 0);
+			pusher = new RemoteMotor(conn, 1);
+			pusherRaw =  new NXTMotor(new RemoteMotorPort(conn, 1));
 			mainBeltMotor = new RemoteMotor(conn, 2);
 		}
 		
-		sideBelt = new Belt(sideBeltMotor, 21);  // port C
+		sideBelt = new Belt(MirrorMotor.invertMotor(sideBeltMotor), 21);  // port C
 		mainBelt = new Belt(MirrorMotor.invertMotor(mainBeltMotor), 27);  // port C
 		
 		this.conn = conn;
 
-		if(pusher instanceof RemoteMotor)
+		if(conn == null && pusher instanceof RemoteMotor)
 			System.err.println(
 				"Warning: local constructor called in remote environment" +
 				"- using default remote NXT"

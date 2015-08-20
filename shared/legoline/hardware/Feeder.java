@@ -73,13 +73,13 @@ public class Feeder implements AutoCloseable {
 	public void reset() throws InterruptedException {
 		// first, get an unregulated copy of pusher, and zero it
 		feederRaw.setPower(25);
-		feederRaw.forward();
+		feederRaw.backward();
 		Util.waitForStall(feederRaw);
 		feederRaw.stop();
 		
 		// now unbend the axle
 		feeder.setSpeed(180);
-		feeder.rotate(-30);
+		feeder.rotate(30);
 		feeder.resetTachoCount();
 		feeder.flt();
 
@@ -90,7 +90,7 @@ public class Feeder implements AutoCloseable {
 		if(!isZeroed) throw new IllegalStateException("Must reset first");
 
 		feeder.setSpeed(720);
-		feeder.rotateTo(-180);
+		feeder.rotateTo(180);
 		
 		feeder.setSpeed(180);
 		feeder.rotateTo(0);
