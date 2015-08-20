@@ -11,6 +11,10 @@ public class Junction implements AutoCloseable {
 	
 	public RegulatedMotor pusher;
 	public EncoderMotor pusherRaw;
+
+	public ObjectDetector sideInSensor;
+	public ObjectDetector mainInSensor;
+	public ObjectDetector outSensor;
 	
 	private NXTCommand conn;
 	private boolean isZeroed = false;
@@ -24,6 +28,9 @@ public class Junction implements AutoCloseable {
 	public Junction(NXTCommand conn) {
 		RegulatedMotor sideBeltMotor;
 		RegulatedMotor mainBeltMotor;
+		ADSensorPort sideInPort;
+		ADSensorPort mainInPort;
+		ADSensorPort outPort;
 	
 		// switch between remote and local cases
 		if(conn == null) {
@@ -31,16 +38,28 @@ public class Junction implements AutoCloseable {
 			pusher = Motor.B;
 			pusherRaw = new NXTMotor(MotorPort.B);
 			mainBeltMotor = Motor.C;
+			
+			sideInPort = SensorPort.S1;
+			mainInPort = SensorPort.S2;
+			outPort = SensorPort.S3;
 		}
 		else {
 			sideBeltMotor = new RemoteMotor(conn, 0);
 			pusher = new RemoteMotor(conn, 1);
 			pusherRaw =  new NXTMotor(new RemoteMotorPort(conn, 1));
 			mainBeltMotor = new RemoteMotor(conn, 2);
+			
+			sideInPort = new RemoteSensorPort(conn, 0);
+			mainInPort = new RemoteSensorPort(conn, 1);
+			outPort = new RemoteSensorPort(conn, 2);
 		}
 		
 		sideBelt = new Belt(MirrorMotor.invertMotor(sideBeltMotor), 21);  // port C
 		mainBelt = new Belt(MirrorMotor.invertMotor(mainBeltMotor), 27);  // port C
+
+		sideInSensor = ObjectDetector.upwardsFacing(new LightSensor(sideInPort));
+		mainInSensor = ObjectDetector.upwardsFacing(new LightSensor(mainInPort));
+		outSensor = ObjectDetector.upwardsFacing(new LightSensor(outPort));
 		
 		this.conn = conn;
 
