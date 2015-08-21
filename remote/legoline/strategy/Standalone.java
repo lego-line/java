@@ -42,10 +42,6 @@ public class Standalone extends Strategy {
 	@Override
 	public void run(Junction j) throws Exception {
 		final float speed = 6; // studs per second
-		final float palletSpacing = 16; // studs
-		final int period = (int) (1000 * palletSpacing / speed); // ms
-		
-		float feedDelay = 0;
 		
 		j.sideBelt.setSpeed(speed);
 		j.sideBelt.enable();
